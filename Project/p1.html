@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Audio Streaming Platform</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+    }
+    .track-list {
+      list-style: none;
+      padding: 0;
+    }
+    .track-list li {
+      padding: 10px;
+      background-color: #fff;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .track-list li:hover {
+      background-color: #f0f0f0;
+    }
+    #audioPlayer {
+      width: 100%;
+      margin-top: 20px;
+    }
+    #progressBar {
+      width: 100%;
+      height: 5px;
+      background-color: #ddd;
+      border-radius: 2px;
+      margin-top: 10px;
+    }
+    #progress {
+      height: 100%;
+      background-color: #007bff;
+      border-radius: 2px;
+    }
+    #duration {
+      font-size: 14px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center mb-4">Advanced Audio Streaming Platform</h1>
+    <ul class="track-list">
+      <li data-src="audio/track1.mp3">Track 1</li>
+      <li data-src="audio/track2.mp3">Track 2</li>
+      <li data-src="audio/track3.mp3">Track 3</li>
+    </ul>
+    <audio id="audioPlayer" controls>
+      Your browser does not support the audio element.
+    </audio>
+    <div id="progressBar">
+      <div id="progress"></div>
+    </div>
+    <div id="duration" class="text-center">00:00 / 00:00</div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var audio = $('#audioPlayer')[0];
+      var durationDisplay = $('#duration');
+      var progressBar = $('#progressBar');
+      var progress = $('#progress');
+
+      audio.addEventListener('timeupdate', function() {
+        var currentTime = audio.currentTime;
+        var duration = audio.duration;
+        var progressWidth = (currentTime / duration) * 100;
+        progress.css('width', progressWidth + '%');
+
+        var formattedCurrentTime = formatTime(currentTime);
+        var formattedDuration = formatTime(duration);
+        durationDisplay.text(formattedCurrentTime + ' / ' + formattedDuration);
+      });
+
+      $('.track-list li').click(function() {
+        var audioSrc = $(this).data('src');
+        $('#audioPlayer').attr('src', audioSrc);
+        audio.play();
+      });
+
+      function formatTime(time) {
+        var minutes = Math.floor(time / 60);
+        var seconds = Math.floor(time % 60);
+        return (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+      }
+    });
+  </script>
+</body>
+</html>
